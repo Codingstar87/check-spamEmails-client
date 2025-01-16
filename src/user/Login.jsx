@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Login.css';
 
 const api = axios.create({
-    baseURL: "https://check-spamemails-2.onrender.com/auth", 
+    baseURL: "https://check-spamemails-2.onrender.com/auth",
     withCredentials: true,
 });
 
@@ -12,36 +12,43 @@ function Login() {
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState('');
 
+    // Handle form input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(''); // Reset error on new attempt
         try {
-            
+            // Login attempt
             await api.post('/login', formData);
 
-           
+            // Fetch user data after successful login
             const userResponse = await api.get('/user');
             setUserData(userResponse.data);
-            setError('');
+
         } catch (err) {
+            // Handle error during login or user data fetch
             if (err.response && err.response.data) {
-               
                 setError(err.response.data.detail || 'Error: Login failed.');
             } else {
-                
                 setError('Error: Something went wrong. Please try again.');
             }
-
-            
-            setTimeout(() => {
-                setError('');
-            }, 5000);
         }
     };
+
+    // Clear the error message after 5 seconds
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                setError('');
+            }, 5000);
+            return () => clearTimeout(timer); // Cleanup timer on component unmount
+        }
+    }, [error]);
 
     return (
         <div>
@@ -65,7 +72,9 @@ function Login() {
                 />
                 <button type="submit">Login</button>
             </form>
+
             {error && <p style={{ color: 'red' }}>{error}</p>}
+
             {userData && (
                 <div>
                     <h2>Welcome, {userData.username}</h2>

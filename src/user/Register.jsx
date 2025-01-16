@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Register.css';
 
+// Create axios instance with base URL and credentials
 const api = axios.create({
-    baseURL: 'https://check-spamemails-2.onrender.com/auth',  
+    baseURL: 'https://check-spamemails-2.onrender.com/auth',
     withCredentials: true,  
 });
 
@@ -11,11 +12,13 @@ function Register() {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
     const [message, setMessage] = useState('');
 
+    // Handle form data changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -27,13 +30,18 @@ function Register() {
             } else {
                 setMessage('Error: Something went wrong. Please try again.');
             }
-        } finally {
-       
-            setTimeout(() => {
-                setMessage('');
-            }, 5000);
         }
     };
+
+    // Clear the message after 5 seconds
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                setMessage('');
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
 
     return (
         <div>
