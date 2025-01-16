@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './Register.css';
 
-
-
 const api = axios.create({
-    baseURL: 'https://check-spamemails-2.onrender.com/auth',  // Your backend API URL
-    withCredentials: true,  // Include cookies with requests
+    baseURL: 'https://check-spamemails-2.onrender.com/auth',  
+    withCredentials: true,  
 });
-
 
 function Register() {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
@@ -26,12 +23,15 @@ function Register() {
             setMessage(response.data.message || 'User registered successfully!');
         } catch (error) {
             if (error.response && error.response.data) {
-                // Extracting detail from backend error response
                 setMessage(error.response.data.detail || 'Error: Registration failed.');
             } else {
-                // Handling unexpected errors
                 setMessage('Error: Something went wrong. Please try again.');
             }
+        } finally {
+            // Clear the message after 5 seconds
+            setTimeout(() => {
+                setMessage('');
+            }, 5000);
         }
     };
 

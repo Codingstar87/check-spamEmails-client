@@ -35,6 +35,11 @@ function Login() {
                 // Handle unexpected errors
                 setError('Error: Something went wrong. Please try again.');
             }
+
+            // Clear the error message after 5 seconds
+            setTimeout(() => {
+                setError('');
+            }, 5000);
         }
     };
 
