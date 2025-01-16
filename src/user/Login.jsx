@@ -3,7 +3,7 @@ import axios from 'axios';
 import './Login.css';
 
 const api = axios.create({
-    baseURL: "https://check-spamemails-2.onrender.com/auth", // Fixed baseURL
+    baseURL: "https://check-spamemails-2.onrender.com/auth", 
     withCredentials: true,
 });
 
@@ -20,23 +20,23 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Perform login
+            
             await api.post('/login', formData);
 
-            // Fetch user data upon successful login
+           
             const userResponse = await api.get('/user');
             setUserData(userResponse.data);
             setError('');
         } catch (err) {
             if (err.response && err.response.data) {
-                // Extract detail from the backend error response
+               
                 setError(err.response.data.detail || 'Error: Login failed.');
             } else {
-                // Handle unexpected errors
+                
                 setError('Error: Something went wrong. Please try again.');
             }
 
-            // Clear the error message after 5 seconds
+            
             setTimeout(() => {
                 setError('');
             }, 5000);

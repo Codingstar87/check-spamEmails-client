@@ -28,7 +28,7 @@ function Register() {
                 setMessage('Error: Something went wrong. Please try again.');
             }
         } finally {
-            // Clear the message after 5 seconds
+       
             setTimeout(() => {
                 setMessage('');
             }, 5000);
